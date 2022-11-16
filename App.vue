@@ -8,6 +8,12 @@
 	page {
 		background-color: #f5f5f5;
 	}
+	::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+		color:transparent;
+	}
 
 	/* #endif */
 	.example-info {

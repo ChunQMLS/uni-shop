@@ -94,7 +94,6 @@
 					return uni.$showMsg()
 				}
 				// 请求成功为data中floorList赋值
-				console.log(res.message)
 				this.floorList = res.message
 			},
 		}
