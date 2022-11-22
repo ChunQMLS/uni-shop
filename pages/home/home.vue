@@ -1,5 +1,10 @@
 <template>
-	<view>
+	<view id="h">
+		<!-- 搜索框 -->
+		<view class="search-box">
+			<search disabled="true" @click="shiftSearch"></search>
+		</view>
+		
 		<!-- 分类导航 -->
 		<view class="nav-list">
 			<view class="nav-item" v-for="(item,index) in navList" :key="index">
@@ -96,6 +101,13 @@
 				// 请求成功为data中floorList赋值
 				this.floorList = res.message
 			},
+			
+			// 跳转到search页面
+			shiftSearch(){
+				uni.navigateTo({
+					url: '/subpkg/search/search'
+				})
+			}
 		}
 	}
 </script>
@@ -109,6 +121,12 @@
 		margin: 10rpx 15rpx;
 		border-radius: 15rpx;
 		overflow: hidden;
+	}
+	.search-box {
+		margin: 10rpx 15rpx;
+		position: sticky;
+		top: 10rpx;
+		z-index: 5;
 	}
 	.nav-list {
 		display: flex;
