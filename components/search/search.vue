@@ -3,7 +3,7 @@
 		<uni-icons type="search" :color="bgcolor" size="24"></uni-icons>
 		<input class="search-input" type="text" :disabled="disabled" :focus="autofocus" v-model="searchVal" @input="input" @click="searchHandler" :style="{'color':textColor}">
 		<uni-icons class="search-clearicon" type="clear" size="24" v-show="clearIcon" @click="clearSearchVal" ></uni-icons>
-		<button class="search-button" :style="{'background': bgcolor}">搜索</button>
+		<button class="search-button" :style="{'background': bgcolor}" @click="searchButtonHandler">搜索</button>
 	</view>
 </template>
 
@@ -59,6 +59,11 @@
 			clearSearchVal(){
 				this.searchVal = ''
 				this.$emit('getSearchList',this.searchVal)
+			},
+			
+			// 搜索按钮回调
+			searchButtonHandler(){
+				this.$emit('shiftGoodsList',this.searchVal)
 			}
 		}
 	}

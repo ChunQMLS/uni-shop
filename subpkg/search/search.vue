@@ -2,7 +2,7 @@
 	<view>
 		<!-- 搜索框 -->
 		<view class="search-box">
-			<search autofocus="true" @getSearchList="getSearchList"></search>
+			<search autofocus="true" @getSearchList="getSearchList" @shiftGoodsList="shiftGoodsList"></search>
 		</view>
 		
 		<!-- 列表渲染 -->
@@ -56,7 +56,6 @@
 					return uni.$showMsg()
 				}
 				this.results = res.message
-				this.saveSearchHistory(searchVal)
 			},
 			
 			// 跳转到商品页面
@@ -83,6 +82,9 @@
 			
 			// 跳转到商品列表
 			shiftGoodsList(keyword){
+				// 保存搜索关键词
+				this.saveSearchHistory(keyword)
+				// 跳转
 				uni.navigateTo({
 					url: `/subpkg/goods_list/goods_list?query=${keyword}`
 				})
