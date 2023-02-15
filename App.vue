@@ -1,3 +1,12 @@
+<script>
+	export default {
+		data() {
+			return {
+				
+			};
+		}
+	}
+</script>
 
 <style lang="scss">
 	/*每个页面公共css */

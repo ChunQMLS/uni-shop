@@ -28,12 +28,15 @@
 		</view>
 		<rich-text :nodes="goods_info.goods_introduce"></rich-text>
 		<view class="goods-nav">
-			<uni-goods-nav :fill="true" :options="options" :buttonGroup="buttonGroup" @click="onClick" ></uni-goods-nav>
+			<uni-goods-nav :fill="true" :options="options" :buttonGroup="buttonGroup" @click="onClick" @buttonClick="buttonClick"></uni-goods-nav>
 		</view>
 	</view>
 </template>
 
 <script>
+	// 引入vuex mapMutations,mapGetters 方法
+	import { mapMutations,mapGetters } from 'vuex'
+	
 	export default {
 		data() {
 			return {
@@ -47,8 +50,7 @@
 					text: '店铺'
 				},{
 					icon: 'cart',
-					text: '购物车',
-					info: 2
+					text: '购物车'
 				}],
 				// 右侧按钮配置项
 				buttonGroup: [{
@@ -61,6 +63,24 @@
 					color: '#fff'
 				}]
 			};
+		},
+		computed:{
+			// 将cart total 映射
+			...mapGetters('m_cart',['total'])
+		},
+		watch:{
+			// 监听cart total的变化，改变info值
+			total:{
+				handler(newVal){
+					// 获取目标对象
+					const targetObj = this.options.find( obj => obj.text === '购物车')
+					// 修改info值
+					if(targetObj){
+						targetObj.info = newVal
+					}
+				},
+				immediate:true
+			}
 		},
 		onLoad(options) {
 			// 获取商品id
@@ -94,16 +114,35 @@
 			
 			// 底部导航左侧点击事件
 			onClick(e){
-				console.log(e)
 				// 判断哪个按钮
 				if(e.content.text === '购物车') {
 					uni.switchTab({
 						url: '/pages/cart/cart'
 					})
 				}
-			}
+			},
 			
+			// 底部导航右侧点击事件
+			buttonClick(e){
+				// 加入购物车事件
+				if(e.content.text === '加入购物车') {
+					// 初始化购物车对象
+					const  goods = {
+						goods_id: this.goods_info.goods_id,
+						goods_name: this.goods_info.goods_name,
+						goods_price: this.goods_info.goods_price,
+						goods_count: 1,
+						goods_small_logo: this.goods_info.goods_small_logo,
+						goods_state: true
+					}
+					
+					// 添加对象到cart state
+					this.addToCart(goods)
+				}
+			},
 			
+			// 映射 mutation 方法
+			...mapMutations('m_cart',['addToCart'])
 		}
 	}
 </script>

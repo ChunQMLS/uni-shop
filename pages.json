@@ -50,13 +50,39 @@
                     "style" :
                     {
                     	"navigationBarTitleText": "",
-                    	"enablePullDownRefresh": false,
 						"onReachBottomDistance": 150,
 						"enablePullDownRefresh": true
                     }
                 }
                 ,{
                     "path" : "search/search",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "goods_order/goods_order",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "my_address/my_address",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "address_editing/address_editing",
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "",
