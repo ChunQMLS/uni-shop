@@ -38,7 +38,7 @@
 					{{settlementAmount}}
 				</view>
 			</view>
-			<button class="bottom-nav-button">提交订单</button>
+			<button class="bottom-nav-button" @click="submitOrder">提交订单</button>
 		</view>
 		<number-update-box :show="numberBoxShow" hint="请输入" :number="targetGoods.goods_count" @handler="numberBoxAfterHandler"></number-update-box>
 		<view class="mask-layer" v-if="numberBoxShow" catchtouchmove="true"></view>
@@ -112,6 +112,49 @@
 				}else{
 					return
 				}
+			},
+			
+			submitOrder(){
+				if(!this.checkedGoods) return uni.$showMsg('请选择商品')
+				if(!this.address) return uni.$showMsg('请选择地址')
+				this.payOrder()
+			},
+			
+			// 微信支付
+			async payOrder(){
+				// 订单信息
+				const orderInfo = {
+					order_price: 0.01,
+					consignee_addr: this.address,
+					goods: this.checkedGoods.filter(x=>x.goods_state).map(x=> ({goods_id:x.goods_id,goods_number:x.goods_count,goods_price:x.goods_price}))
+				}
+				
+				// 请求创建订单
+				const {data:res} = await uni.$http.post('/api/public/v1/my/orders/create',orderInfo)
+				if(res.meta.status !== 200) return uni.$showMsg('创建订单失败！')
+				
+				// 获得订单编号
+				const orderNumber = res.message.order_number
+				
+				// 订单预支付
+				const {data:res2} = await uni.$http.post('/api/public/v1/my/orders/req_unifiedorder',{order_number: orderNumber})
+				// 预付订单生成失败
+				if(res2.meta.status !== 200) return uni.$showMsg('预付订单生成失败！')
+				// 得到订单支付的相关参数
+				const payInfo = res2.message.pay
+				
+				// 发起支付
+				const [err,succ] = await uni.requestPayment(payInfo)
+				// 未支付
+				if(err) return uni.$showMsg('订单未支付')
+				const {data:res3} = await uni.$http.post('/api/public/v1/my/order/chkOrder',{order_number: orderNumber})
+				// 检测订单未支付
+				if(res3.meta.status !==200) return uni.$showMsg('订单未支付！')
+				// 支付完成
+				uni.showToast({
+					title: '支付完成！',
+					icon: 'success'
+				})
 			}
 		}
 	}

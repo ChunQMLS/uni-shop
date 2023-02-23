@@ -75,7 +75,7 @@
 			// 将cart 映射
 			...mapState('m_cart',['cart']),
 			// 将cart total 映射
-			...mapGetters('m_cart',['total','checkAll','settlementAmount'])
+			...mapGetters('m_cart',['total','checkAll','settlementAmount','checkedTotal'])
 		},
 		methods:{
 			// 引入 store 中修改商品状态的方法 updateState updateNumber removeGoodById
@@ -131,6 +131,7 @@
 			},
 			
 			shiftGoodsOrder(){
+				if(!this.checkedTotal) return uni.$showMsg('请勾选商品')
 				uni.navigateTo({
 					url: '/subpkg/goods_order/goods_order'
 				})
